@@ -1,5 +1,14 @@
-function main() {
-  console.log("Hello world!");
+import "reflect-metadata";
+import { AppDataSource } from "./database/datasource.js";
+
+class Server {
+  constructor() {
+    this.startApp();
+  }
+
+  private async startApp() {
+    AppDataSource.initialize();
+  }
 }
 
-main();
+export const server = new Server();
