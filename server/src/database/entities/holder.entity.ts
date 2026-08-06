@@ -16,10 +16,10 @@ export class Holder extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: "varchar" })
   name!: string;
 
-  @Column({ unique: true })
+  @Column({ type: "varchar", unique: true })
   @Index({ unique: true })
   external_id!: string;
 

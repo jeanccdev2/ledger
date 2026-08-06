@@ -17,18 +17,18 @@ export class DefaultEntry extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: "varchar" })
   name!: string;
 
-  @Column({ nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Index()
   account_debit_id?: number | null;
 
-  @Column({ nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Index()
   account_credit_id?: number | null;
 
-  @Column()
+  @Column({ type: "varchar" })
   status!: "active" | "inactive";
 
   @CreateDateColumn()

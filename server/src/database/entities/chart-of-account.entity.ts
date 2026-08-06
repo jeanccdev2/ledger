@@ -20,24 +20,24 @@ export class ChartOfAccount extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ nullable: true })
+  @Column({ type: "integer", nullable: true })
   @Index()
   parent_id!: number | null;
 
-  @Column({ unique: true })
+  @Column({ type: "varchar", unique: true })
   @Index({ unique: true })
   code!: string;
 
-  @Column()
+  @Column({ type: "varchar" })
   label!: string;
 
-  @Column()
+  @Column({ type: "varchar" })
   nature!: "debit" | "credit";
 
-  @Column()
+  @Column({ type: "varchar" })
   type!: "synthetic" | "analytical";
 
-  @Column()
+  @Column({ type: "varchar" })
   status!: "active" | "inactive";
 
   @CreateDateColumn()

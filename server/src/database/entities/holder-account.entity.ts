@@ -19,15 +19,15 @@ export class HolderAccount extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: "integer" })
   @Index()
   holder_id!: number;
 
-  @Column()
+  @Column({ type: "integer" })
   @Index({ unique: true })
   chart_of_account_id!: number;
 
-  @Column()
+  @Column({ type: "varchar" })
   status!: "active" | "inactive";
 
   @CreateDateColumn()

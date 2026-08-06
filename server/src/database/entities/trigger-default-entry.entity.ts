@@ -17,21 +17,21 @@ export class TriggerDefaultEntry extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column({ type: "varchar" })
   name!: string;
 
-  @Column()
+  @Column({ type: "integer" })
   @Index()
   default_entry_id!: number;
 
-  @Column()
+  @Column({ type: "integer" })
   @Index()
   trigger_default_entry_id!: number;
 
-  @Column()
+  @Column({ type: "varchar" })
   status!: "active" | "inactive";
 
-  @Column()
+  @Column({ type: "integer" })
   order_position!: number;
 
   @CreateDateColumn()

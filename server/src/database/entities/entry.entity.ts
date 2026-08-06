@@ -17,16 +17,17 @@ export class Entry extends BaseEntity {
   id!: number;
 
   @Column({
+    type: "varchar",
     unique: true,
   })
   @Index({ unique: true })
   nsu!: string;
 
-  @Column()
+  @Column({ type: "integer" })
   @Index()
   debit_account_id!: number;
 
-  @Column()
+  @Column({ type: "integer" })
   @Index()
   credit_account_id!: number;
 
@@ -51,7 +52,7 @@ export class Entry extends BaseEntity {
   })
   description!: string | null;
 
-  @Column()
+  @Column({ type: "integer" })
   @Index()
   default_entry_id!: number;
 
