@@ -1,9 +1,11 @@
 import "reflect-metadata";
 import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
+import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
 import { DataSource } from "typeorm";
 import { datasourceConfig } from "./database/datasource.js";
+import { HolderRoutes } from "./routes/holder.routes.js";
 
-class Server {
+export class Server {
   private static readonly port = Number(process.env.PORT ?? 3000);
   private static readonly host = process.env.HOST ?? "127.0.0.1";
 
@@ -16,6 +18,9 @@ class Server {
 
   static async startApp(): Promise<void> {
     try {
+      Server.app.setValidatorCompiler(validatorCompiler);
+      Server.app.setSerializerCompiler(serializerCompiler);
+
       await Server.appDataSource.initialize();
 
       Server.app.log.info("Database connected successfully");
@@ -49,7 +54,7 @@ class Server {
     });
   }
 
-  private static configRoutes(): void {
+  private static async configRoutes() {
     Server.app.get("/health", async (_request, reply) => {
       return reply.status(200).send({
         status: "ok",
@@ -59,6 +64,8 @@ class Server {
         timestamp: new Date().toISOString(),
       });
     });
+
+    await Server.app.register(HolderRoutes.defineRoutes);
   }
 
   private static configErrorHandlers(): void {

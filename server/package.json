@@ -26,8 +26,10 @@
   "dependencies": {
     "better-sqlite3": "^12.11.1",
     "fastify": "^5.11.2",
+    "fastify-type-provider-zod": "^7.0.0",
     "reflect-metadata": "^0.2.2",
-    "typeorm": "^1.1.0"
+    "typeorm": "^1.1.0",
+    "zod": "^4.4.3"
   },
   "allowScripts": {
     "better-sqlite3@12.11.1": true,
