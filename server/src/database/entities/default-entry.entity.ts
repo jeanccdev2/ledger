@@ -10,7 +10,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from "typeorm";
-import { ChartOfAccount } from "./chart-of-account.entity.js";
+import type { ChartOfAccount } from "./chart-of-account.entity.js";
 
 @Entity("default_entries")
 export class DefaultEntry extends BaseEntity {
@@ -40,11 +40,11 @@ export class DefaultEntry extends BaseEntity {
   @DeleteDateColumn()
   deleted_at?: Date | null;
 
-  @ManyToOne(() => ChartOfAccount, { nullable: true, onDelete: "RESTRICT" })
+  @ManyToOne("ChartOfAccount", { nullable: true, onDelete: "RESTRICT" })
   @JoinColumn({ name: "account_debit_id" })
   accountDebit?: ChartOfAccount | null;
 
-  @ManyToOne(() => ChartOfAccount, { nullable: true, onDelete: "RESTRICT" })
+  @ManyToOne("ChartOfAccount", { nullable: true, onDelete: "RESTRICT" })
   @JoinColumn({ name: "account_credit_id" })
   accountCredit?: ChartOfAccount | null;
 }

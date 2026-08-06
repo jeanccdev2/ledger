@@ -10,7 +10,7 @@ import {
   ManyToOne,
   JoinColumn,
 } from "typeorm";
-import { DefaultEntry } from "./default-entry.entity.js";
+import type { DefaultEntry } from "./default-entry.entity.js";
 
 @Entity("trigger_default_entries")
 export class TriggerDefaultEntry extends BaseEntity {
@@ -43,11 +43,11 @@ export class TriggerDefaultEntry extends BaseEntity {
   @DeleteDateColumn()
   deleted_at?: Date | null;
 
-  @ManyToOne(() => DefaultEntry, { nullable: false, onDelete: "CASCADE" })
+  @ManyToOne("DefaultEntry", { nullable: false, onDelete: "CASCADE" })
   @JoinColumn({ name: "default_entry_id" })
   defaultEntry!: DefaultEntry;
 
-  @ManyToOne(() => DefaultEntry, { nullable: false, onDelete: "CASCADE" })
+  @ManyToOne("DefaultEntry", { nullable: false, onDelete: "CASCADE" })
   @JoinColumn({ name: "trigger_default_entry_id" })
   triggerDefaultEntry!: DefaultEntry;
 }

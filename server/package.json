@@ -8,7 +8,11 @@
     "start": "tsx src/server.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
-    "start:prod": "node dist/server.js"
+    "start:prod": "node dist/server.js",
+    "typeorm": "node node_modules/typeorm/cli.js",
+    "migration:generate": "npm run build && node node_modules/typeorm/cli.js migration:generate -d dist/database/datasource.js",
+    "migration:run": "npm run build && node node_modules/typeorm/cli.js migration:run -d dist/database/datasource.js",
+    "migration:revert": "npm run build && node node_modules/typeorm/cli.js migration:revert -d dist/database/datasource.js"
   },
   "keywords": [],
   "author": "",
@@ -23,5 +27,9 @@
     "better-sqlite3": "^12.11.1",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^1.1.0"
+  },
+  "allowScripts": {
+    "better-sqlite3@12.11.1": true,
+    "esbuild@0.28.1": true
   }
 }

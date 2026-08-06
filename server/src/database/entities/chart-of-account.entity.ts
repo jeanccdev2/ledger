@@ -12,8 +12,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { HolderAccount } from "./holder-account.entity.js";
-import { Entry } from "./entry.entity.js";
+import type { HolderAccount } from "./holder-account.entity.js";
+import type { Entry } from "./entry.entity.js";
 
 @Entity("chart_of_accounts")
 export class ChartOfAccount extends BaseEntity {
@@ -64,14 +64,14 @@ export class ChartOfAccount extends BaseEntity {
   children!: ChartOfAccount[];
 
   @OneToOne(
-    () => HolderAccount,
-    (holderAccount) => holderAccount.chartOfAccount,
+    "HolderAccount",
+    (holderAccount: HolderAccount) => holderAccount.chartOfAccount,
   )
   holderAccount!: HolderAccount | null;
 
-  @OneToMany(() => Entry, (entry) => entry.debitAccount)
+  @OneToMany("Entry", (entry: Entry) => entry.debitAccount)
   debitEntries!: Entry[];
 
-  @OneToMany(() => Entry, (entry) => entry.creditAccount)
+  @OneToMany("Entry", (entry: Entry) => entry.creditAccount)
   creditEntries!: Entry[];
 }

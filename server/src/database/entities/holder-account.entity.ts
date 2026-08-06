@@ -11,8 +11,8 @@ import {
   JoinColumn,
   Index,
 } from "typeorm";
-import { Holder } from "./holder.entity.js";
-import { ChartOfAccount } from "./chart-of-account.entity.js";
+import type { Holder } from "./holder.entity.js";
+import type { ChartOfAccount } from "./chart-of-account.entity.js";
 
 @Entity("holder_accounts")
 export class HolderAccount extends BaseEntity {
@@ -39,7 +39,7 @@ export class HolderAccount extends BaseEntity {
   @DeleteDateColumn()
   deleted_at?: Date | null;
 
-  @ManyToOne(() => Holder, (holder) => holder.holderAccounts, {
+  @ManyToOne("Holder", (holder: Holder) => holder.holderAccounts, {
     nullable: false,
     onDelete: "RESTRICT",
   })
@@ -47,8 +47,8 @@ export class HolderAccount extends BaseEntity {
   holder!: Holder;
 
   @OneToOne(
-    () => ChartOfAccount,
-    (chartOfAccount) => chartOfAccount.holderAccount,
+    "ChartOfAccount",
+    (chartOfAccount: ChartOfAccount) => chartOfAccount.holderAccount,
   )
   @JoinColumn({ name: "chart_of_account_id" })
   chartOfAccount!: ChartOfAccount;

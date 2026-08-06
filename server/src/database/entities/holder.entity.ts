@@ -9,7 +9,7 @@ import {
   OneToMany,
   Index,
 } from "typeorm";
-import { HolderAccount } from "./holder-account.entity.js";
+import type { HolderAccount } from "./holder-account.entity.js";
 
 @Entity("holders")
 export class Holder extends BaseEntity {
@@ -32,6 +32,6 @@ export class Holder extends BaseEntity {
   @DeleteDateColumn()
   deleted_at?: Date | null;
 
-  @OneToMany(() => HolderAccount, (holderAccount) => holderAccount.holder)
+  @OneToMany("HolderAccount", (holderAccount: HolderAccount) => holderAccount.holder)
   holderAccounts!: HolderAccount[];
 }

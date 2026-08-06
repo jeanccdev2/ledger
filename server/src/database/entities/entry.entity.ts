@@ -8,8 +8,8 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import { ChartOfAccount } from "./chart-of-account.entity.js";
-import { DefaultEntry } from "./default-entry.entity.js";
+import type { ChartOfAccount } from "./chart-of-account.entity.js";
+import type { DefaultEntry } from "./default-entry.entity.js";
 
 @Entity("entries")
 export class Entry extends BaseEntity {
@@ -60,8 +60,8 @@ export class Entry extends BaseEntity {
   created_at!: Date;
 
   @ManyToOne(
-    () => ChartOfAccount,
-    (chartOfAccount) => chartOfAccount.debitEntries,
+    "ChartOfAccount",
+    (chartOfAccount: ChartOfAccount) => chartOfAccount.debitEntries,
     {
       nullable: false,
       onDelete: "RESTRICT",
@@ -71,8 +71,8 @@ export class Entry extends BaseEntity {
   debitAccount!: ChartOfAccount;
 
   @ManyToOne(
-    () => ChartOfAccount,
-    (chartOfAccount) => chartOfAccount.creditEntries,
+    "ChartOfAccount",
+    (chartOfAccount: ChartOfAccount) => chartOfAccount.creditEntries,
     {
       nullable: false,
       onDelete: "RESTRICT",
@@ -81,7 +81,7 @@ export class Entry extends BaseEntity {
   @JoinColumn({ name: "credit_account_id" })
   creditAccount!: ChartOfAccount;
 
-  @ManyToOne(() => DefaultEntry, {
+  @ManyToOne("DefaultEntry", {
     nullable: false,
     onDelete: "RESTRICT",
   })
