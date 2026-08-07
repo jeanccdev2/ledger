@@ -12,7 +12,8 @@
     "typeorm": "node node_modules/typeorm/cli.js",
     "migration:generate": "npm run build && node node_modules/typeorm/cli.js migration:generate -d dist/database/datasource.js",
     "migration:run": "npm run build && node node_modules/typeorm/cli.js migration:run -d dist/database/datasource.js",
-    "migration:revert": "npm run build && node node_modules/typeorm/cli.js migration:revert -d dist/database/datasource.js"
+    "migration:revert": "npm run build && node node_modules/typeorm/cli.js migration:revert -d dist/database/datasource.js",
+    "test": "vitest --run"
   },
   "keywords": [],
   "author": "",
@@ -20,14 +21,17 @@
   "type": "module",
   "devDependencies": {
     "@types/node": "^26.1.2",
+    "fast-check": "^3.23.2",
     "tsx": "^4.23.8",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^2.1.9"
   },
   "dependencies": {
     "better-sqlite3": "^12.11.1",
     "fastify": "^5.11.2",
     "fastify-type-provider-zod": "^7.0.0",
     "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.10.0",
     "typeorm": "^1.1.0",
     "zod": "^4.4.3"
   },
