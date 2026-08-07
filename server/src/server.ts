@@ -4,6 +4,7 @@ import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod
 import { DataSource } from "typeorm";
 import { datasourceConfig } from "./database/datasource.js";
 import { HolderRoutes } from "./routes/holder.routes.js";
+import { container, DATA_SOURCE_TOKEN } from "./container.js";
 
 export class Server {
   private static readonly port = Number(process.env.PORT ?? 3000);
@@ -24,6 +25,8 @@ export class Server {
       await Server.appDataSource.initialize();
 
       Server.app.log.info("Database connected successfully");
+
+      container.register(DATA_SOURCE_TOKEN, { useValue: Server.appDataSource });
 
       Server.configLifecycle();
       Server.configRoutes();

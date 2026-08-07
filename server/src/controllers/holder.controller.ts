@@ -1,7 +1,9 @@
 import { FastifyReply, FastifyRequest } from "fastify";
+import { singleton } from "tsyringe";
 import { HolderService } from "../services/holder.service.js";
 import { ApiResponse } from "../utils/api-response.js";
 
+@singleton()
 export class HolderController {
   constructor(readonly holderService: HolderService) {}
 
