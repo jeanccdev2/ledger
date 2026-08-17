@@ -4,7 +4,12 @@ import { IHolderRepository } from "./holder.repository.js";
 import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../container/tokens.js";
 import { PaginationResponse } from "../../shared/pagination.types.js";
-import { FindAllHoldersQuery } from "./holders.validations.js";
+import {
+  CreateHolderBody,
+  FindAllHoldersQuery,
+  UpdateHolderBody,
+} from "./holders.validations.js";
+import { Uuid } from "../../shared/shared.validations.js";
 
 type SerializedHolder = {
   id: number;
@@ -19,7 +24,13 @@ export interface IHolderService {
     data: SerializedHolder[];
     pagination: PaginationResponse;
   }>;
-  findByUuid(holderUuid: string): Promise<unknown>;
+  findByUuid(holderUuid: string): Promise<SerializedHolder | null>;
+  createHolder(holder: CreateHolderBody): Promise<SerializedHolder>;
+  updateHolder(
+    holderUuid: Uuid,
+    holder: UpdateHolderBody,
+  ): Promise<SerializedHolder>;
+  deleteHolder(holderUuid: string): Promise<SerializedHolder>;
 }
 
 @injectable()
@@ -73,5 +84,30 @@ export class HolderService implements IHolderService {
     const holder = await this.holderRepository.findByUuid(holderUuid);
 
     return this.serializeHolder(holder);
+  }
+
+  async createHolder(holder: CreateHolderBody) {
+    const newHolder = await this.holderRepository.create(
+      holder.name,
+      holder.external_id,
+    );
+
+    return this.serializeHolder(newHolder);
+  }
+
+  async updateHolder(holderUuid: Uuid, holder: UpdateHolderBody) {
+    const updatedHolder = await this.holderRepository.update(
+      holderUuid,
+      holder.name,
+      holder.external_id,
+    );
+
+    return this.serializeHolder(updatedHolder);
+  }
+
+  async deleteHolder(holderUuid: string) {
+    const deletedHolder = await this.holderRepository.delete(holderUuid);
+
+    return this.serializeHolder(deletedHolder);
   }
 }

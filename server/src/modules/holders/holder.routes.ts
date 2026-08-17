@@ -3,7 +3,11 @@ import { ZodTypeProvider } from "fastify-type-provider-zod";
 import { container } from "tsyringe";
 import { TOKENS } from "../../container/tokens.js";
 import { IHolderController } from "./holder.controller.js";
-import { findAllHoldersQuerySchema } from "./holders.validations.js";
+import {
+  createHolderBodySchema,
+  findAllHoldersQuerySchema,
+  updateHolderBodySchema,
+} from "./holders.validations.js";
 import { uuidSchema } from "../../shared/shared.validations.js";
 
 export class HolderRoutes {
@@ -29,6 +33,31 @@ export class HolderRoutes {
         params: { holderUuid: uuidSchema },
       },
       handler: holderController.getByUuid,
+    });
+
+    app.post("/holders", {
+      schema: {
+        tags: [HolderRoutes.TAG],
+        body: createHolderBodySchema,
+      },
+      handler: holderController.postCreateHolder,
+    });
+
+    app.patch("/holders/:holderUuid", {
+      schema: {
+        tags: [HolderRoutes.TAG],
+        params: { holderUuid: uuidSchema },
+        body: updateHolderBodySchema,
+      },
+      handler: holderController.patchUpdateHolder,
+    });
+
+    app.delete("/holders/:holderUuid", {
+      schema: {
+        tags: [HolderRoutes.TAG],
+        params: { holderUuid: uuidSchema },
+      },
+      handler: holderController.deleteHolder,
     });
   }
 }

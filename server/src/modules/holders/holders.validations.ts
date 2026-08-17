@@ -7,3 +7,14 @@ export const findAllHoldersQuerySchema = z.object({
 });
 
 export type FindAllHoldersQuery = z.infer<typeof findAllHoldersQuerySchema>;
+
+export const createHolderBodySchema = z.object({
+  name: z.string(),
+  external_id: z.string(),
+});
+
+export type CreateHolderBody = z.infer<typeof createHolderBodySchema>;
+
+export const updateHolderBodySchema = createHolderBodySchema.partial();
+
+export type UpdateHolderBody = z.infer<typeof updateHolderBodySchema>;
