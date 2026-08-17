@@ -26,3 +26,5 @@ export const datasourceConfig: DataSourceOptions = {
     ? ["dist/database/migrations/*.js"]
     : ["src/database/migrations/*.ts"],
 };
+
+export const dataSource = new DataSource(datasourceConfig);

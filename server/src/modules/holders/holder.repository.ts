@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 import { Holder } from "../../database/entities/holder.entity.js";
-import { Server } from "../../apps/core.js";
 import { injectable } from "tsyringe";
+import { dataSource } from "../../database/datasource.js";
 
 export interface IHolderRepository {
   findAll(): Promise<[Holder[], number]>;
@@ -13,7 +13,7 @@ export class HolderRepository implements IHolderRepository {
   private holderRepo: Repository<Holder>;
 
   constructor() {
-    this.holderRepo = Server.appDataSource.getRepository(Holder);
+    this.holderRepo = dataSource.getRepository(Holder);
   }
 
   async findAll() {

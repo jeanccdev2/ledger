@@ -4,28 +4,27 @@ import {
   serializerCompiler,
   validatorCompiler,
 } from "fastify-type-provider-zod";
-import { DataSource } from "typeorm";
-import { datasourceConfig } from "../database/datasource.js";
+import { dataSource } from "../database/datasource.js";
 import { HolderRoutes } from "../modules/holders/holder.routes.js";
 import { env } from "../shared/env.js";
 import { setupContainer } from "../container/setup-container.js";
 import fastifySwagger from "@fastify/swagger";
 import scalarApiReference from "@scalar/fastify-api-reference";
+import { AppLogger } from "../shared/logger.js";
 
-export class Server {
+export class Core {
   private static readonly port = env.PORT;
   private static readonly host = env.HOST;
+  private static readonly logger = new AppLogger("Core");
 
   static readonly app: FastifyInstance = Fastify({
-    logger: true,
+    logger: false,
   });
-
-  static readonly appDataSource = new DataSource(datasourceConfig);
 
   static async startApp(): Promise<void> {
     try {
-      await this.appDataSource.initialize();
-      this.app.log.info("Database connected successfully");
+      await dataSource.initialize();
+      this.logger.log("Database connected successfully");
 
       this.app.setValidatorCompiler(validatorCompiler);
       this.app.setSerializerCompiler(serializerCompiler);
@@ -43,9 +42,9 @@ export class Server {
         host: this.host,
       });
 
-      this.app.log.info(`Server running at ${address}`);
+      this.logger.log(`Core running at ${address}`);
     } catch (error) {
-      this.app.log.error(error, "Failed to start application");
+      this.logger.error(error, "Failed to start application");
 
       await this.closeResources();
 
@@ -55,9 +54,9 @@ export class Server {
 
   private static configLifecycle(): void {
     this.app.addHook("onClose", async () => {
-      if (this.appDataSource.isInitialized) {
-        await this.appDataSource.destroy();
-        this.app.log.info("Database connection closed");
+      if (dataSource.isInitialized) {
+        await dataSource.destroy();
+        this.logger.log("Database connection closed");
       }
     });
   }
@@ -66,9 +65,7 @@ export class Server {
     this.app.get("/health", async (_request, reply) => {
       return reply.status(200).send({
         status: "ok",
-        database: this.appDataSource.isInitialized
-          ? "connected"
-          : "disconnected",
+        database: dataSource.isInitialized ? "connected" : "disconnected",
         timestamp: new Date().toISOString(),
       });
     });
@@ -86,7 +83,7 @@ export class Server {
     });
 
     this.app.setErrorHandler(async (error: FastifyError, request, reply) => {
-      request.log.error(error);
+      this.logger.error(error);
 
       const statusCode =
         error.statusCode && error.statusCode >= 400 ? error.statusCode : 500;
@@ -109,15 +106,15 @@ export class Server {
 
       isShuttingDown = true;
 
-      this.app.log.info({ signal }, "Shutdown signal received");
+      this.logger.log({ signal }, "Shutdown signal received");
 
       try {
         await this.closeResources();
 
-        this.app.log.info("Application stopped successfully");
+        this.logger.log("Application stopped successfully");
         process.exit(0);
       } catch (error) {
-        this.app.log.error(error, "Error during shutdown");
+        this.logger.error(error, "Error during shutdown");
         process.exit(1);
       }
     };
@@ -133,12 +130,12 @@ export class Server {
 
   private static async closeResources(): Promise<void> {
     try {
-      if (this.appDataSource.isInitialized) {
-        await this.appDataSource.destroy();
+      if (dataSource.isInitialized) {
+        await dataSource.destroy();
       }
       await this.app.close();
     } catch (error) {
-      this.app.log.error(error, "Failed to close application resources");
+      this.logger.error(error, "Failed to close application resources");
     }
   }
 
@@ -162,4 +159,4 @@ export class Server {
   }
 }
 
-void Server.startApp();
+void Core.startApp();
