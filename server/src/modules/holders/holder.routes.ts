@@ -1,8 +1,8 @@
 import { FastifyInstance } from "fastify";
 import { ZodTypeProvider } from "fastify-type-provider-zod";
-import { HolderController } from "../controllers/holder.controller.js";
-import { HolderService } from "../services/holder.service.js";
-import { HolderRepository } from "../repositories/holder.repository.js";
+import { HolderController } from "./holder.controller.js";
+import { HolderService } from "./holder.service.js";
+import { HolderRepository } from "./holder.repository.js";
 
 export class HolderRoutes {
   static async defineRoutes(fastify: FastifyInstance) {

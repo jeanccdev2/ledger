@@ -1,75 +1,78 @@
 import "reflect-metadata";
 import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
-import { serializerCompiler, validatorCompiler } from "fastify-type-provider-zod";
+import {
+  serializerCompiler,
+  validatorCompiler,
+} from "fastify-type-provider-zod";
 import { DataSource } from "typeorm";
 import { datasourceConfig } from "../database/datasource.js";
-import { HolderRoutes } from "../modules/holders/routes/holder.routes.js";
+import { HolderRoutes } from "../modules/holders/holder.routes.js";
+import { env } from "../shared/env.js";
 
 export class Server {
-  private static readonly port = Number(process.env.PORT ?? 3000);
-  private static readonly host = process.env.HOST ?? "127.0.0.1";
+  private static readonly port = env.PORT;
+  private static readonly host = env.HOST;
 
   static readonly app: FastifyInstance = Fastify({
     logger: true,
-    bodyLimit: 1024 * 1024,
   });
 
   static readonly appDataSource = new DataSource(datasourceConfig);
 
   static async startApp(): Promise<void> {
     try {
-      Server.app.setValidatorCompiler(validatorCompiler);
-      Server.app.setSerializerCompiler(serializerCompiler);
+      this.app.setValidatorCompiler(validatorCompiler);
+      this.app.setSerializerCompiler(serializerCompiler);
 
-      await Server.appDataSource.initialize();
+      await this.appDataSource.initialize();
 
-      Server.app.log.info("Database connected successfully");
+      this.app.log.info("Database connected successfully");
 
-      Server.configLifecycle();
-      Server.configRoutes();
-      Server.configErrorHandlers();
-      Server.configProcessSignals();
+      this.configLifecycle();
+      this.configRoutes();
+      this.configErrorHandlers();
+      this.configProcessSignals();
 
-      const address = await Server.app.listen({
-        port: Server.port,
-        host: Server.host,
+      const address = await this.app.listen({
+        port: this.port,
+        host: this.host,
       });
 
-      Server.app.log.info(`Server running at ${address}`);
+      this.app.log.info(`Server running at ${address}`);
     } catch (error) {
-      Server.app.log.error(error, "Failed to start application");
+      this.app.log.error(error, "Failed to start application");
 
-      await Server.closeResources();
+      await this.closeResources();
 
       process.exit(1);
     }
   }
 
   private static configLifecycle(): void {
-    Server.app.addHook("onClose", async () => {
-      if (Server.appDataSource.isInitialized) {
-        await Server.appDataSource.destroy();
-        Server.app.log.info("Database connection closed");
+    this.app.addHook("onClose", async () => {
+      if (this.appDataSource.isInitialized) {
+        await this.appDataSource.destroy();
+        this.app.log.info("Database connection closed");
       }
     });
   }
 
   private static async configRoutes() {
-    Server.app.get("/health", async (_request, reply) => {
+    this.app.get("/health", async (_request, reply) => {
       return reply.status(200).send({
         status: "ok",
-        database: Server.appDataSource.isInitialized
+        database: this.appDataSource.isInitialized
           ? "connected"
           : "disconnected",
         timestamp: new Date().toISOString(),
       });
     });
 
-    await Server.app.register(HolderRoutes.defineRoutes);
+    await this.app.register(HolderRoutes.defineRoutes);
   }
 
   private static configErrorHandlers(): void {
-    Server.app.setNotFoundHandler(async (request, reply) => {
+    this.app.setNotFoundHandler(async (request, reply) => {
       return reply.status(404).send({
         statusCode: 404,
         error: "Not Found",
@@ -77,7 +80,7 @@ export class Server {
       });
     });
 
-    Server.app.setErrorHandler(async (error: FastifyError, request, reply) => {
+    this.app.setErrorHandler(async (error: FastifyError, request, reply) => {
       request.log.error(error);
 
       const statusCode =
@@ -101,15 +104,15 @@ export class Server {
 
       isShuttingDown = true;
 
-      Server.app.log.info({ signal }, "Shutdown signal received");
+      this.app.log.info({ signal }, "Shutdown signal received");
 
       try {
-        await Server.closeResources();
+        await this.closeResources();
 
-        Server.app.log.info("Application stopped successfully");
+        this.app.log.info("Application stopped successfully");
         process.exit(0);
       } catch (error) {
-        Server.app.log.error(error, "Error during shutdown");
+        this.app.log.error(error, "Error during shutdown");
         process.exit(1);
       }
     };
@@ -125,12 +128,12 @@ export class Server {
 
   private static async closeResources(): Promise<void> {
     try {
-      if (Server.appDataSource.isInitialized) {
-        await Server.appDataSource.destroy();
+      if (this.appDataSource.isInitialized) {
+        await this.appDataSource.destroy();
       }
-      await Server.app.close();
+      await this.app.close();
     } catch (error) {
-      Server.app.log.error(error, "Failed to close application resources");
+      this.app.log.error(error, "Failed to close application resources");
     }
   }
 }

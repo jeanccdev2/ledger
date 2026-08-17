@@ -1,6 +1,6 @@
 import { EntityNotFoundError } from "typeorm";
-import { Holder } from "../../../database/entities/holder.entity.js";
-import { HolderRepository } from "../repositories/holder.repository.js";
+import { Holder } from "../../database/entities/holder.entity.js";
+import { HolderRepository } from "./holder.repository.js";
 
 export class HolderService {
   constructor(readonly holderRepository: HolderRepository) {}
