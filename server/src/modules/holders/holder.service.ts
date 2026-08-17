@@ -19,7 +19,7 @@ export interface IHolderService {
     data: SerializedHolder[];
     pagination: PaginationResponse;
   }>;
-  findOne(holderId: number): Promise<unknown>;
+  findByUuid(holderUuid: string): Promise<unknown>;
 }
 
 @injectable()
@@ -69,8 +69,8 @@ export class HolderService implements IHolderService {
     };
   }
 
-  async findOne(holderId: number) {
-    const holder = await this.holderRepository.findById(holderId);
+  async findByUuid(holderUuid: string) {
+    const holder = await this.holderRepository.findByUuid(holderUuid);
 
     return this.serializeHolder(holder);
   }

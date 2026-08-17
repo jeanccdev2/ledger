@@ -4,6 +4,7 @@ import { container } from "tsyringe";
 import { TOKENS } from "../../container/tokens.js";
 import { IHolderController } from "./holder.controller.js";
 import { findAllHoldersQuerySchema } from "./holders.validations.js";
+import { uuidSchema } from "../../shared/shared.validations.js";
 
 export class HolderRoutes {
   private static TAG = "Holders";
@@ -20,6 +21,14 @@ export class HolderRoutes {
         querystring: findAllHoldersQuerySchema,
       },
       handler: holderController.getFindAll,
+    });
+
+    app.get("/holders/:holderUuid", {
+      schema: {
+        tags: [HolderRoutes.TAG],
+        params: { holderUuid: uuidSchema },
+      },
+      handler: holderController.getByUuid,
     });
   }
 }

@@ -4,12 +4,17 @@ import { inject, injectable } from "tsyringe";
 import { TOKENS } from "../../container/tokens.js";
 import { FindAllHoldersQuery } from "./holders.validations.js";
 import { FastifyReply, FastifyRequest } from "../../shared/http.types.js";
+import { Uuid } from "../../shared/shared.validations.js";
 
 export interface IHolderController {
   getFindAll(
     req: FastifyRequest<{ query: FindAllHoldersQuery }>,
     res: FastifyReply,
-  ): Promise<void>;
+  ): Promise<ApiResponse>;
+  getByUuid(
+    req: FastifyRequest<{ params: { holderUuid: Uuid } }>,
+    res: FastifyReply,
+  ): Promise<ApiResponse>;
 }
 
 @injectable()
@@ -27,6 +32,17 @@ export class HolderController implements IHolderController {
 
     const response = ApiResponse.ok("List holders successfully", data);
 
-    res.status(response.status).send(response);
+    return response;
+  };
+
+  getByUuid = async (
+    req: FastifyRequest<{ params: { holderUuid: Uuid } }>,
+    res: FastifyReply,
+  ) => {
+    const { holderUuid } = req.params;
+    const data = await this.holderService.findByUuid(holderUuid);
+    const response = ApiResponse.ok("Get holder by uuid successfully", data);
+
+    return response;
   };
 }

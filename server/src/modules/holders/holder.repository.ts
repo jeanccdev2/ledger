@@ -9,7 +9,7 @@ export interface IHolderRepository {
     page: number,
     searchName?: string | null,
   ): Promise<[Holder[], number]>;
-  findById(holderId: number): Promise<Holder | null>;
+  findByUuid(holderUuid: string): Promise<Holder | null>;
 }
 
 @injectable()
@@ -32,9 +32,9 @@ export class HolderRepository implements IHolderRepository {
     });
   }
 
-  async findById(holderId: number) {
+  async findByUuid(holderUuid: string) {
     return this.holderRepo.findOneBy({
-      id: holderId,
+      uuid: holderUuid,
     });
   }
 }

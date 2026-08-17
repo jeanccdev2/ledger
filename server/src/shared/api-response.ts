@@ -1,4 +1,4 @@
-export class ApiResponse<T> {
+export class ApiResponse<T = any> {
   constructor(
     public readonly message: string,
     public readonly data: T,
