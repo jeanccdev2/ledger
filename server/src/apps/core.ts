@@ -8,6 +8,7 @@ import { DataSource } from "typeorm";
 import { datasourceConfig } from "../database/datasource.js";
 import { HolderRoutes } from "../modules/holders/holder.routes.js";
 import { env } from "../shared/env.js";
+import { setupContainer } from "../container/setup-container.js";
 
 export class Server {
   private static readonly port = env.PORT;
@@ -32,6 +33,7 @@ export class Server {
       this.configRoutes();
       this.configErrorHandlers();
       this.configProcessSignals();
+      setupContainer();
 
       const address = await this.app.listen({
         port: this.port,

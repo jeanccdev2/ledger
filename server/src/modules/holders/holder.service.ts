@@ -1,9 +1,20 @@
 import { EntityNotFoundError } from "typeorm";
 import { Holder } from "../../database/entities/holder.entity.js";
-import { HolderRepository } from "./holder.repository.js";
+import { IHolderRepository } from "./holder.repository.js";
+import { inject, injectable } from "tsyringe";
+import { TOKENS } from "../../container/tokens.js";
 
-export class HolderService {
-  constructor(readonly holderRepository: HolderRepository) {}
+export interface IHolderService {
+  findAll(): Promise<unknown>;
+  findOne(holderId: number): Promise<unknown>;
+}
+
+@injectable()
+export class HolderService implements IHolderService {
+  constructor(
+    @inject(TOKENS.Holders.Repository)
+    private readonly holderRepository: IHolderRepository,
+  ) {}
 
   private serializeHolder(holder: Holder | null) {
     if (!holder) throw new EntityNotFoundError(Holder, "");

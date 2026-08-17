@@ -1,8 +1,15 @@
 import { Repository } from "typeorm";
 import { Holder } from "../../database/entities/holder.entity.js";
 import { Server } from "../../apps/core.js";
+import { injectable } from "tsyringe";
 
-export class HolderRepository {
+export interface IHolderRepository {
+  findAll(): Promise<[Holder[], number]>;
+  findById(holderId: number): Promise<Holder | null>;
+}
+
+@injectable()
+export class HolderRepository implements IHolderRepository {
   private holderRepo: Repository<Holder>;
 
   constructor() {
