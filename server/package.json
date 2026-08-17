@@ -27,6 +27,8 @@
     "vitest": "^2.1.9"
   },
   "dependencies": {
+    "@fastify/swagger": "^9.8.1",
+    "@scalar/fastify-api-reference": "^1.65.1",
     "better-sqlite3": "^12.11.1",
     "dotenv": "^17.4.2",
     "fastify": "^5.11.2",

@@ -9,6 +9,8 @@ import { datasourceConfig } from "../database/datasource.js";
 import { HolderRoutes } from "../modules/holders/holder.routes.js";
 import { env } from "../shared/env.js";
 import { setupContainer } from "../container/setup-container.js";
+import fastifySwagger from "@fastify/swagger";
+import scalarApiReference from "@scalar/fastify-api-reference";
 
 export class Server {
   private static readonly port = env.PORT;
@@ -22,18 +24,19 @@ export class Server {
 
   static async startApp(): Promise<void> {
     try {
+      await this.appDataSource.initialize();
+      this.app.log.info("Database connected successfully");
+
       this.app.setValidatorCompiler(validatorCompiler);
       this.app.setSerializerCompiler(serializerCompiler);
 
-      await this.appDataSource.initialize();
-
-      this.app.log.info("Database connected successfully");
-
+      setupContainer();
       this.configLifecycle();
-      this.configRoutes();
       this.configErrorHandlers();
       this.configProcessSignals();
-      setupContainer();
+
+      await this.configOpenApi();
+      await this.configRoutes();
 
       const address = await this.app.listen({
         port: this.port,
@@ -137,6 +140,25 @@ export class Server {
     } catch (error) {
       this.app.log.error(error, "Failed to close application resources");
     }
+  }
+
+  private static async configOpenApi() {
+    await this.app.register(fastifySwagger, {
+      openapi: {
+        info: {
+          title: "Wise SQL API",
+          version: "1.0.0",
+        },
+      },
+    });
+
+    await this.app.register(scalarApiReference, {
+      routePrefix: "/reference",
+      configuration: {
+        title: "Wise SQL API Reference",
+        theme: "purple",
+      },
+    });
   }
 }
 
