@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
-import { Holder } from "../database/entities/holder.entity.js";
-import { Server } from "../server.js";
+import { Holder } from "../../../database/entities/holder.entity.js";
+import { Server } from "../../../apps/core.js";
 
 export class HolderRepository {
   private holderRepo: Repository<Holder>;

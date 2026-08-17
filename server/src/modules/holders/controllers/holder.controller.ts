@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
 import { HolderService } from "../services/holder.service.js";
-import { ApiResponse } from "../utils/api-response.js";
+import { ApiResponse } from "../../../shared/api-response.js";
 
 export class HolderController {
   constructor(readonly holderService: HolderService) {}

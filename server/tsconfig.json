@@ -17,6 +17,7 @@
 
     "sourceMap": true,
     "declaration": false,
+    "tsBuildInfoFile": "cache/tsconfig.tsbuildinfo",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
 
