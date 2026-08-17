@@ -1,135 +1,47 @@
-type PaginationResponse = {
-  totalRows: number;
-  totalPages: number;
-  limit: number;
-  currentPage: number;
-};
+export class ApiResponse<T> {
+  constructor(
+    public readonly message: string,
+    public readonly data: T,
+    public readonly status: number,
+  ) {}
 
-type SimpleApiResponse<T = null> = {
-  status: number;
-  message: string;
-  data: T;
-};
-
-type PaginatedApiResponse<T = null> = {
-  status: number;
-  message: string;
-  data: T;
-  pagination: PaginationResponse;
-};
-
-export class ApiResponse {
-  static success<T = null>(message: string, data: T): SimpleApiResponse<T> {
-    return {
-      status: 200,
-      message,
-      data,
-    };
+  static ok<T>(message: string, data: T): ApiResponse<T> {
+    return new ApiResponse(message, data, 200);
   }
 
-  static successPaginated<T = null>(
-    message: string,
-    data: T,
-    pagination: PaginationResponse,
-  ): PaginatedApiResponse<T> {
-    return {
-      status: 200,
-      message,
-      data,
-      pagination,
-    };
+  static created<T>(message: string, data: T): ApiResponse<T> {
+    return new ApiResponse(message, data, 201);
   }
 
-  static created<T = null>(message: string, data: T): SimpleApiResponse<T> {
-    return {
-      status: 201,
-      message,
-      data,
-    };
+  static noContent<T>(message: string, data: T): ApiResponse<T> {
+    return new ApiResponse(message, data, 204);
   }
 
-  static noContent<T = null>(message: string, data: T): SimpleApiResponse<T> {
-    return {
-      status: 204,
-      message,
-      data,
-    };
+  static badRequest<T>(message: string, data: T): ApiResponse<T> {
+    return new ApiResponse(message, data, 400);
   }
 
-  static badRequest<T = null>(message: string, data: T): SimpleApiResponse<T> {
-    return {
-      status: 400,
-      message,
-      data,
-    };
+  static unauthorized<T>(message: string, data: T): ApiResponse<T> {
+    return new ApiResponse(message, data, 401);
   }
 
-  static unauthorized<T = null>(
-    message: string,
-    data: T,
-  ): SimpleApiResponse<T> {
-    return {
-      status: 401,
-      message,
-      data,
-    };
+  static forbidden<T>(message: string, data: T): ApiResponse<T> {
+    return new ApiResponse(message, data, 403);
   }
 
-  static forbidden<T = null>(message: string, data: T): SimpleApiResponse<T> {
-    return {
-      status: 403,
-      message,
-      data,
-    };
+  static notFound<T>(message: string, data: T): ApiResponse<T> {
+    return new ApiResponse(message, data, 404);
   }
 
-  static notFound<T = null>(message: string, data: T): SimpleApiResponse<T> {
-    return {
-      status: 404,
-      message,
-      data,
-    };
+  static conflict<T>(message: string, data: T): ApiResponse<T> {
+    return new ApiResponse(message, data, 409);
   }
 
-  static conflict<T = null>(message: string, data: T): SimpleApiResponse<T> {
-    return {
-      status: 409,
-      message,
-      data,
-    };
+  static unprocessableEntity<T>(message: string, data: T): ApiResponse<T> {
+    return new ApiResponse(message, data, 422);
   }
 
-  static unprocessableEntity<T = null>(
-    message: string,
-    data: T,
-  ): SimpleApiResponse<T> {
-    return {
-      status: 422,
-      message,
-      data,
-    };
-  }
-
-  static internalServerError<T = null>(
-    message: string,
-    data: T,
-  ): SimpleApiResponse<T> {
-    return {
-      status: 500,
-      message,
-      data,
-    };
-  }
-
-  static error<T = null>(
-    status: number,
-    message: string,
-    data: T,
-  ): SimpleApiResponse<T> {
-    return {
-      status,
-      message,
-      data,
-    };
+  static internalServerError<T>(message: string, data: T): ApiResponse<T> {
+    return new ApiResponse(message, data, 500);
   }
 }

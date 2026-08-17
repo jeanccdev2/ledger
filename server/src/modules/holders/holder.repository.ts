@@ -1,10 +1,14 @@
-import { Repository } from "typeorm";
+import { FindOptionsWhere, Like, Repository } from "typeorm";
 import { Holder } from "../../database/entities/holder.entity.js";
 import { injectable } from "tsyringe";
 import { dataSource } from "../../database/datasource.js";
 
 export interface IHolderRepository {
-  findAll(): Promise<[Holder[], number]>;
+  findAll(
+    limit: number,
+    page: number,
+    searchName?: string | null,
+  ): Promise<[Holder[], number]>;
   findById(holderId: number): Promise<Holder | null>;
 }
 
@@ -16,8 +20,16 @@ export class HolderRepository implements IHolderRepository {
     this.holderRepo = dataSource.getRepository(Holder);
   }
 
-  async findAll() {
-    return this.holderRepo.findAndCount();
+  async findAll(limit: number, offset: number, searchName?: string | null) {
+    const filters: FindOptionsWhere<Holder> = {};
+
+    if (searchName) filters.name = Like(`%${searchName}%`);
+
+    return this.holderRepo.findAndCount({
+      take: limit,
+      skip: offset,
+      where: filters,
+    });
   }
 
   async findById(holderId: number) {

@@ -11,6 +11,7 @@ import { setupContainer } from "../container/setup-container.js";
 import fastifySwagger from "@fastify/swagger";
 import scalarApiReference from "@scalar/fastify-api-reference";
 import { AppLogger } from "../shared/logger.js";
+import { ApiResponse } from "../shared/api-response.js";
 
 export class Core {
   private static readonly port = env.PORT;
@@ -35,6 +36,7 @@ export class Core {
       this.configProcessSignals();
 
       await this.configOpenApi();
+      this.addApiResponseHandler();
       await this.configRoutes();
 
       const address = await this.app.listen({
@@ -155,6 +157,29 @@ export class Core {
         title: "Wise SQL API Reference",
         theme: "purple",
       },
+    });
+  }
+
+  private static addApiResponseHandler() {
+    this.app.addHook("preSerialization", async (request, reply, payload) => {
+      if (payload instanceof ApiResponse) {
+        reply.code(payload.status);
+        let data: any = payload.data;
+        let pagination: any;
+
+        if (data.pagination) {
+          pagination = data.pagination;
+          data = payload.data?.data || payload.data;
+        }
+
+        return {
+          status: payload.status,
+          message: payload.message,
+          data,
+          ...(pagination && { pagination }),
+        };
+      }
+      return payload;
     });
   }
 }
