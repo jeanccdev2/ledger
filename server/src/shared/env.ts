@@ -2,12 +2,13 @@ import z from "zod";
 import "dotenv/config";
 
 const databaseSchema = z.object({
-  DB_TYPE: z.enum(["postgres"]).default("postgres"),
-  DB_HOST: z.string(),
-  DB_PORT: z.coerce.number().default(5432),
-  DB_USER: z.string(),
-  DB_PASS: z.string(),
-  DB_NAME: z.string(),
+  // DB_TYPE: z.enum(["postgres"]).default("postgres"),
+  // DB_HOST: z.string(),
+  // DB_PORT: z.coerce.number().default(5432),
+  // DB_USER: z.string(),
+  // DB_PASS: z.string(),
+  // DB_NAME: z.string(),
+  DB_PATH: z.string().default("db.sqlite"),
 });
 
 const appSchema = z.object({

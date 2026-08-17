@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts",
+    "dev": "tsx watch src/apps/core.ts",
     "start": "tsx src/server.ts",
     "typecheck": "tsc --noEmit",
     "build": "tsc",
-    "start:prod": "node dist/server.js",
+    "start:prod": "node dist/apps/core.js",
     "typeorm": "node node_modules/typeorm/cli.js",
     "migration:generate": "npm run build && node node_modules/typeorm/cli.js migration:generate -d dist/database/datasource.js",
     "migration:run": "npm run build && node node_modules/typeorm/cli.js migration:run -d dist/database/datasource.js",
@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "better-sqlite3": "^12.11.1",
+    "dotenv": "^17.4.2",
     "fastify": "^5.11.2",
     "fastify-type-provider-zod": "^7.0.0",
     "reflect-metadata": "^0.2.2",
