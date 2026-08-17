@@ -10,11 +10,19 @@ import {
   Index,
 } from "typeorm";
 import type { HolderAccount } from "./holder-account.entity.js";
+import { Uuid } from "../../shared/shared.validations.js";
 
 @Entity("holders")
 export class Holder extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({
+    type: "uuid",
+    unique: true,
+    nullable: false,
+  })
+  uuid!: Uuid;
 
   @Column({ type: "varchar" })
   name!: string;
@@ -32,6 +40,9 @@ export class Holder extends BaseEntity {
   @DeleteDateColumn()
   deleted_at?: Date | null;
 
-  @OneToMany("HolderAccount", (holderAccount: HolderAccount) => holderAccount.holder)
+  @OneToMany(
+    "HolderAccount",
+    (holderAccount: HolderAccount) => holderAccount.holder,
+  )
   holderAccounts!: HolderAccount[];
 }
