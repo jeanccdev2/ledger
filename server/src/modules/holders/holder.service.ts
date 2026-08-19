@@ -10,6 +10,7 @@ import {
   UpdateHolderBody,
 } from "./holders.validations.js";
 import { Uuid } from "../../shared/shared.validations.js";
+import { ApiResponse } from "../../shared/api-response.js";
 
 type SerializedHolder = {
   id: Uuid;
@@ -41,7 +42,7 @@ export class HolderService implements IHolderService {
   ) {}
 
   private serializeHolder(holder: Holder | null): SerializedHolder {
-    if (!holder) throw new EntityNotFoundError(Holder, "");
+    if (!holder) throw ApiResponse.notFound("Holder não encontrado");
 
     return {
       id: holder.uuid,
@@ -100,8 +101,7 @@ export class HolderService implements IHolderService {
   async updateHolder(holderUuid: Uuid, holder: UpdateHolderBody) {
     const existsHolder = await this.findByUuid(holderUuid);
 
-    if (!existsHolder)
-      throw new EntityNotFoundError(Holder, "Holder não encontrado");
+    if (!existsHolder) throw ApiResponse.notFound("Holder não encontrado");
 
     const updatedHolder = await this.holderRepository.update(
       holderUuid,
@@ -115,8 +115,7 @@ export class HolderService implements IHolderService {
   async deleteHolder(holderUuid: string) {
     const existsHolder = await this.findByUuid(holderUuid);
 
-    if (!existsHolder)
-      throw new EntityNotFoundError(Holder, "Holder não encontrado");
+    if (!existsHolder) throw ApiResponse.notFound("Holder não encontrado");
 
     const deletedHolder = await this.holderRepository.delete(holderUuid);
 

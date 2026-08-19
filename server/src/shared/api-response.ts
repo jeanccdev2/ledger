@@ -5,43 +5,43 @@ export class ApiResponse<T = any> {
     public readonly status: number,
   ) {}
 
-  static ok<T>(message: string, data: T): ApiResponse<T> {
+  static ok<T = null>(message: string, data: T = null as T): ApiResponse<T> {
     return new ApiResponse(message, data, 200);
   }
 
-  static created<T>(message: string, data: T): ApiResponse<T> {
+  static created<T = null>(message: string, data: T = null as T): ApiResponse<T> {
     return new ApiResponse(message, data, 201);
   }
 
-  static noContent<T>(message: string, data: T): ApiResponse<T> {
+  static noContent<T = null>(message: string, data: T = null as T): ApiResponse<T> {
     return new ApiResponse(message, data, 204);
   }
 
-  static badRequest<T>(message: string, data: T): ApiResponse<T> {
+  static badRequest<T = null>(message: string, data: T = null as T): ApiResponse<T> {
     return new ApiResponse(message, data, 400);
   }
 
-  static unauthorized<T>(message: string, data: T): ApiResponse<T> {
+  static unauthorized<T = null>(message: string, data: T = null as T): ApiResponse<T> {
     return new ApiResponse(message, data, 401);
   }
 
-  static forbidden<T>(message: string, data: T): ApiResponse<T> {
+  static forbidden<T = null>(message: string, data: T = null as T): ApiResponse<T> {
     return new ApiResponse(message, data, 403);
   }
 
-  static notFound<T>(message: string, data: T): ApiResponse<T> {
+  static notFound<T = null>(message: string, data: T = null as T): ApiResponse<T> {
     return new ApiResponse(message, data, 404);
   }
 
-  static conflict<T>(message: string, data: T): ApiResponse<T> {
+  static conflict<T = null>(message: string, data: T = null as T): ApiResponse<T> {
     return new ApiResponse(message, data, 409);
   }
 
-  static unprocessableEntity<T>(message: string, data: T): ApiResponse<T> {
+  static unprocessableEntity<T = null>(message: string, data: T = null as T): ApiResponse<T> {
     return new ApiResponse(message, data, 422);
   }
 
-  static internalServerError<T>(message: string, data: T): ApiResponse<T> {
+  static internalServerError<T = null>(message: string, data: T = null as T): ApiResponse<T> {
     return new ApiResponse(message, data, 500);
   }
 }

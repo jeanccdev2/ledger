@@ -13,6 +13,7 @@ import fastifySwagger from "@fastify/swagger";
 import scalarApiReference from "@scalar/fastify-api-reference";
 import { AppLogger } from "../shared/logger.js";
 import { ApiResponse } from "../shared/api-response.js";
+import { errorHandler } from "../shared/error-handler.js";
 
 export class Core {
   private static readonly port = env.PORT;
@@ -85,18 +86,7 @@ export class Core {
       });
     });
 
-    this.app.setErrorHandler(async (error: FastifyError, request, reply) => {
-      this.logger.error(error);
-
-      const statusCode =
-        error.statusCode && error.statusCode >= 400 ? error.statusCode : 500;
-
-      return reply.status(statusCode).send({
-        statusCode,
-        error: statusCode >= 500 ? "Internal Server Error" : error.name,
-        message: statusCode >= 500 ? "Internal server error" : error.message,
-      });
-    });
+    this.app.setErrorHandler(errorHandler);
   }
 
   private static configProcessSignals(): void {
