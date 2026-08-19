@@ -3,6 +3,7 @@ import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
 import {
   serializerCompiler,
   validatorCompiler,
+  jsonSchemaTransform,
 } from "fastify-type-provider-zod";
 import { dataSource } from "../database/datasource.js";
 import { HolderRoutes } from "../modules/holders/holder.routes.js";
@@ -149,6 +150,7 @@ export class Core {
           version: "1.0.0",
         },
       },
+      transform: jsonSchemaTransform,
     });
 
     await this.app.register(scalarApiReference, {

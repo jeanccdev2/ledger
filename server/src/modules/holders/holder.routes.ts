@@ -6,9 +6,11 @@ import { IHolderController } from "./holder.controller.js";
 import {
   createHolderBodySchema,
   findAllHoldersQuerySchema,
+  holderUuidParamSchema,
   updateHolderBodySchema,
 } from "./holders.validations.js";
 import { uuidSchema } from "../../shared/shared.validations.js";
+import z from "zod";
 
 export class HolderRoutes {
   private static TAG = "Holders";
@@ -30,7 +32,7 @@ export class HolderRoutes {
     app.get("/holders/:holderUuid", {
       schema: {
         tags: [HolderRoutes.TAG],
-        params: { holderUuid: uuidSchema },
+        params: holderUuidParamSchema,
       },
       handler: holderController.getByUuid,
     });
@@ -46,7 +48,7 @@ export class HolderRoutes {
     app.patch("/holders/:holderUuid", {
       schema: {
         tags: [HolderRoutes.TAG],
-        params: { holderUuid: uuidSchema },
+        params: holderUuidParamSchema,
         body: updateHolderBodySchema,
       },
       handler: holderController.patchUpdateHolder,
@@ -55,7 +57,7 @@ export class HolderRoutes {
     app.delete("/holders/:holderUuid", {
       schema: {
         tags: [HolderRoutes.TAG],
-        params: { holderUuid: uuidSchema },
+        params: holderUuidParamSchema,
       },
       handler: holderController.deleteHolder,
     });

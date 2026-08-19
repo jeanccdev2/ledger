@@ -1,5 +1,6 @@
 import z from "zod";
 import { paginationQuerySchema } from "../../shared/pagination.types.js";
+import { uuidSchema } from "../../shared/shared.validations.js";
 
 export const findAllHoldersQuerySchema = z.object({
   ...paginationQuerySchema.shape,
@@ -18,3 +19,9 @@ export type CreateHolderBody = z.infer<typeof createHolderBodySchema>;
 export const updateHolderBodySchema = createHolderBodySchema.partial();
 
 export type UpdateHolderBody = z.infer<typeof updateHolderBodySchema>;
+
+export const holderUuidParamSchema = z.object({
+  holderUuid: uuidSchema,
+});
+
+export type HolderUuidParam = z.infer<typeof holderUuidParamSchema>;

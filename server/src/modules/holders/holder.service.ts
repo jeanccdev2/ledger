@@ -12,7 +12,7 @@ import {
 import { Uuid } from "../../shared/shared.validations.js";
 
 type SerializedHolder = {
-  id: number;
+  id: Uuid;
   name: string;
   external_id: string;
   created_at: Date;
@@ -44,7 +44,7 @@ export class HolderService implements IHolderService {
     if (!holder) throw new EntityNotFoundError(Holder, "");
 
     return {
-      id: holder.id,
+      id: holder.uuid,
       name: holder.name,
       external_id: holder.external_id,
       created_at: holder.created_at,
@@ -83,6 +83,8 @@ export class HolderService implements IHolderService {
   async findByUuid(holderUuid: string) {
     const holder = await this.holderRepository.findByUuid(holderUuid);
 
+    if (!holder) return null;
+
     return this.serializeHolder(holder);
   }
 
@@ -96,6 +98,11 @@ export class HolderService implements IHolderService {
   }
 
   async updateHolder(holderUuid: Uuid, holder: UpdateHolderBody) {
+    const existsHolder = await this.findByUuid(holderUuid);
+
+    if (!existsHolder)
+      throw new EntityNotFoundError(Holder, "Holder não encontrado");
+
     const updatedHolder = await this.holderRepository.update(
       holderUuid,
       holder.name,
@@ -106,6 +113,11 @@ export class HolderService implements IHolderService {
   }
 
   async deleteHolder(holderUuid: string) {
+    const existsHolder = await this.findByUuid(holderUuid);
+
+    if (!existsHolder)
+      throw new EntityNotFoundError(Holder, "Holder não encontrado");
+
     const deletedHolder = await this.holderRepository.delete(holderUuid);
 
     return this.serializeHolder(deletedHolder);

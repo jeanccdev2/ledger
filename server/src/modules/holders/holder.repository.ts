@@ -7,6 +7,7 @@ import {
 import { Holder } from "../../database/entities/holder.entity.js";
 import { injectable } from "tsyringe";
 import { dataSource } from "../../database/datasource.js";
+import { v4 } from "uuid";
 
 export interface IHolderRepository {
   findAll(
@@ -54,6 +55,7 @@ export class HolderRepository implements IHolderRepository {
     return this.holderRepo.save({
       name,
       external_id: externalRef,
+      uuid: v4(),
     });
   }
 
