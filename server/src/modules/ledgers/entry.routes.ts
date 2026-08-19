@@ -51,13 +51,5 @@ export class EntryRoutes {
       },
       handler: entryController.patchUpdateEntry,
     });
-
-    app.delete("/entries/:entryUuid", {
-      schema: {
-        tags: [EntryRoutes.TAG],
-        params: entryUuidParamSchema,
-      },
-      handler: entryController.deleteEntry,
-    });
   }
 }

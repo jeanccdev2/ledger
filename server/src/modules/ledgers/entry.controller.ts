@@ -31,10 +31,6 @@ export interface IEntryController {
     }>,
     res: FastifyReply,
   ): Promise<ApiResponse>;
-  deleteEntry(
-    req: FastifyRequest<{ params: EntryUuidParam }>,
-    res: FastifyReply,
-  ): Promise<ApiResponse>;
 }
 
 @injectable()
@@ -87,16 +83,6 @@ export class EntryController implements IEntryController {
     const { body } = req;
     const data = await this.entryService.updateEntry(entryUuid, body);
     const response = ApiResponse.ok("Update entry successfully", data);
-    return response;
-  };
-
-  deleteEntry = async (
-    req: FastifyRequest<{ params: EntryUuidParam }>,
-    res: FastifyReply,
-  ) => {
-    const { entryUuid } = req.params;
-    const data = await this.entryService.deleteEntry(entryUuid);
-    const response = ApiResponse.ok("Delete entry successfully", data);
     return response;
   };
 }

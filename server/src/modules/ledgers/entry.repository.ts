@@ -40,7 +40,6 @@ export interface IEntryRepository {
     defaultEntryId: number,
   ): Promise<Entry>;
   update(entryUuid: string, description: string | null): Promise<Entry>;
-  delete(entryUuid: string): Promise<Entry>;
 }
 
 @injectable()
@@ -117,13 +116,5 @@ export class EntryRepository implements IEntryRepository {
     entry.description = description;
 
     return this.entryRepo.save(entry);
-  }
-
-  async delete(entryUuid: string) {
-    const entry = await this.findByUuid(entryUuid);
-
-    if (!entry) throw ApiResponse.notFound("Entry não encontrada");
-
-    return this.entryRepo.softRemove(entry);
   }
 }

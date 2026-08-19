@@ -38,7 +38,6 @@ export interface IEntryService {
     entryUuid: Uuid,
     entry: UpdateEntryBody,
   ): Promise<SerializedEntry>;
-  deleteEntry(entryUuid: string): Promise<SerializedEntry>;
 }
 
 @injectable()
@@ -187,15 +186,5 @@ export class EntryService implements IEntryService {
     );
 
     return this.serializeEntry(updatedEntry);
-  }
-
-  async deleteEntry(entryUuid: string) {
-    const existsEntry = await this.findByUuid(entryUuid);
-
-    if (!existsEntry) throw ApiResponse.notFound("Entry não encontrado");
-
-    const deletedEntry = await this.entryRepository.delete(entryUuid);
-
-    return this.serializeEntry(deletedEntry);
   }
 }
