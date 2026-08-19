@@ -16,3 +16,6 @@ export const isoDateTimeSchema = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/);
 export type IsoDateTime = z.infer<typeof isoDateTimeSchema>;
+
+export const amountCentsSchema = z.number().int().positive();
+export type AmountCents = z.infer<typeof amountCentsSchema>;

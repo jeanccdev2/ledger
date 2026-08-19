@@ -15,9 +15,9 @@ import { ApiResponse } from "../../shared/api-response.js";
 type SerializedHolder = {
   id: Uuid;
   name: string;
-  external_id: string;
-  created_at: Date;
-  updated_at: Date;
+  externalId: string;
+  createdAt: Date;
+  updatedAt: Date;
 };
 
 export interface IHolderService {
@@ -47,9 +47,9 @@ export class HolderService implements IHolderService {
     return {
       id: holder.uuid,
       name: holder.name,
-      external_id: holder.external_id,
-      created_at: holder.created_at,
-      updated_at: holder.updated_at,
+      externalId: holder.external_id,
+      createdAt: holder.created_at,
+      updatedAt: holder.updated_at,
     };
   }
 

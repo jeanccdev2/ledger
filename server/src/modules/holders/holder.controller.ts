@@ -5,6 +5,7 @@ import { TOKENS } from "../../container/tokens.js";
 import {
   CreateHolderBody,
   FindAllHoldersQuery,
+  HolderUuidParam,
   UpdateHolderBody,
 } from "./holders.validations.js";
 import { FastifyReply, FastifyRequest } from "../../shared/http.types.js";
@@ -16,7 +17,7 @@ export interface IHolderController {
     res: FastifyReply,
   ): Promise<ApiResponse>;
   getByUuid(
-    req: FastifyRequest<{ params: { holderUuid: Uuid } }>,
+    req: FastifyRequest<{ params: HolderUuidParam }>,
     res: FastifyReply,
   ): Promise<ApiResponse>;
   postCreateHolder(
@@ -25,13 +26,13 @@ export interface IHolderController {
   ): Promise<ApiResponse>;
   patchUpdateHolder(
     req: FastifyRequest<{
-      params: { holderUuid: Uuid };
+      params: HolderUuidParam;
       body: UpdateHolderBody;
     }>,
     res: FastifyReply,
   ): Promise<ApiResponse>;
   deleteHolder(
-    req: FastifyRequest<{ params: { holderUuid: Uuid } }>,
+    req: FastifyRequest<{ params: HolderUuidParam }>,
     res: FastifyReply,
   ): Promise<ApiResponse>;
 }
@@ -55,7 +56,7 @@ export class HolderController implements IHolderController {
   };
 
   getByUuid = async (
-    req: FastifyRequest<{ params: { holderUuid: Uuid } }>,
+    req: FastifyRequest<{ params: HolderUuidParam }>,
     res: FastifyReply,
   ) => {
     const { holderUuid } = req.params;
@@ -77,7 +78,7 @@ export class HolderController implements IHolderController {
 
   patchUpdateHolder = async (
     req: FastifyRequest<{
-      params: { holderUuid: Uuid };
+      params: HolderUuidParam;
       body: UpdateHolderBody;
     }>,
     res: FastifyReply,
@@ -90,7 +91,7 @@ export class HolderController implements IHolderController {
   };
 
   deleteHolder = async (
-    req: FastifyRequest<{ params: { holderUuid: Uuid } }>,
+    req: FastifyRequest<{ params: HolderUuidParam }>,
     res: FastifyReply,
   ) => {
     const { holderUuid } = req.params;
