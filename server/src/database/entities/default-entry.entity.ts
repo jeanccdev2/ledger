@@ -11,11 +11,19 @@ import {
   JoinColumn,
 } from "typeorm";
 import type { ChartOfAccount } from "./chart-of-account.entity.js";
+import { Uuid } from "../../shared/shared.validations.js";
 
 @Entity("default_entries")
 export class DefaultEntry extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({
+    type: "uuid",
+    unique: true,
+    nullable: false,
+  })
+  uuid!: Uuid;
 
   @Column({ type: "varchar" })
   name!: string;

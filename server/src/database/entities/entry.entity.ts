@@ -10,11 +10,19 @@ import {
 } from "typeorm";
 import type { ChartOfAccount } from "./chart-of-account.entity.js";
 import type { DefaultEntry } from "./default-entry.entity.js";
+import { Uuid } from "../../shared/shared.validations.js";
 
 @Entity("entries")
 export class Entry extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({
+    type: "varchar",
+    unique: true,
+    nullable: false,
+  })
+  uuid!: Uuid;
 
   @Column({
     type: "varchar",
@@ -34,17 +42,17 @@ export class Entry extends BaseEntity {
   @Column({
     type: "bigint",
   })
-  amount_cents!: string;
+  amount_cents!: bigint;
 
   @Column({
     type: "bigint",
   })
-  debit_balance_cents!: string;
+  debit_balance_cents!: bigint;
 
   @Column({
     type: "bigint",
   })
-  credit_balance_cents!: string;
+  credit_balance_cents!: bigint;
 
   @Column({
     type: "text",

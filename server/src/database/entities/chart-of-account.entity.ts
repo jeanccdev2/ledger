@@ -14,11 +14,19 @@ import {
 } from "typeorm";
 import type { HolderAccount } from "./holder-account.entity.js";
 import type { Entry } from "./entry.entity.js";
+import { Uuid } from "../../shared/shared.validations.js";
 
 @Entity("chart_of_accounts")
 export class ChartOfAccount extends BaseEntity {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({
+    type: "uuid",
+    unique: true,
+    nullable: false,
+  })
+  uuid!: Uuid;
 
   @Column({ type: "integer", nullable: true })
   @Index()
