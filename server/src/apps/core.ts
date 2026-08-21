@@ -15,6 +15,7 @@ import { AppLogger } from "../shared/logger.js";
 import { ApiResponse } from "../shared/api-response.js";
 import { errorHandler } from "../shared/error-handler.js";
 import { EntryRoutes } from "../modules/ledgers/entry.routes.js";
+import { DefaultEntryRoutes } from "../modules/default-entries/default-entry.routes.js";
 
 export class Core {
   private static readonly port = env.PORT;
@@ -77,6 +78,7 @@ export class Core {
 
     await this.app.register(HolderRoutes.defineRoutes);
     await this.app.register(EntryRoutes.defineRoutes);
+    await this.app.register(DefaultEntryRoutes.defineRoutes);
   }
 
   private static configErrorHandlers(): void {

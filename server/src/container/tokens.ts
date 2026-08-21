@@ -13,6 +13,8 @@ export const TOKENS = {
   },
   DefaultEntries: {
     Repository: Symbol.for("DefaultEntryRepository"),
+    Service: Symbol.for("DefaultEntryService"),
+    Controller: Symbol.for("DefaultEntryController"),
   },
   ChartOfAccounts: {
     Repository: Symbol.for("ChartOfAccountRepository"),
