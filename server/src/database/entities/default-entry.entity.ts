@@ -9,9 +9,11 @@ import {
   Index,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from "typeorm";
 import type { ChartOfAccount } from "./chart-of-account.entity.js";
 import { Uuid } from "../../shared/shared.validations.js";
+import { TriggerDefaultEntry } from "./trigger-default-entry.entity.js";
 
 @Entity("default_entries")
 export class DefaultEntry extends BaseEntity {
@@ -39,6 +41,9 @@ export class DefaultEntry extends BaseEntity {
   @Column({ type: "varchar" })
   status!: "active" | "inactive";
 
+  @Column({ type: "integer", nullable: true })
+  amount_cents?: number | null;
+
   @CreateDateColumn()
   created_at!: Date;
 
@@ -55,4 +60,11 @@ export class DefaultEntry extends BaseEntity {
   @ManyToOne("ChartOfAccount", { nullable: true, onDelete: "RESTRICT" })
   @JoinColumn({ name: "account_credit_id" })
   accountCredit?: ChartOfAccount | null;
+
+  @OneToMany(
+    () => TriggerDefaultEntry,
+    (triggerDefaultEntry) => triggerDefaultEntry.defaultEntry,
+    { onDelete: "CASCADE" },
+  )
+  triggerEntries?: TriggerDefaultEntry[];
 }

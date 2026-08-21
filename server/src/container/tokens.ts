@@ -9,6 +9,7 @@ export const TOKENS = {
     Repository: Symbol.for("EntryRepository"),
     Service: Symbol.for("EntryService"),
     Controller: Symbol.for("EntryController"),
+    CreateEntryService: Symbol.for("CreateEntryService"),
   },
   DefaultEntries: {
     Repository: Symbol.for("DefaultEntryRepository"),

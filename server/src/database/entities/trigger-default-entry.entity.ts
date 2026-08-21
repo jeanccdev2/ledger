@@ -34,6 +34,12 @@ export class TriggerDefaultEntry extends BaseEntity {
   @Column({ type: "integer" })
   order_position!: number;
 
+  @Column({ type: "integer", nullable: true })
+  amount_cents?: number | null;
+
+  @Column({ type: "float", nullable: true })
+  percentage?: number | null;
+
   @CreateDateColumn()
   created_at!: Date;
 

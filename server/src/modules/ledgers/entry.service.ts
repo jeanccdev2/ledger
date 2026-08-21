@@ -13,6 +13,7 @@ import { Uuid } from "../../shared/shared.validations.js";
 import { ApiResponse } from "../../shared/api-response.js";
 import { IDefaultEntryRepository } from "../default-entries/default-entry.repository.js";
 import { IChartOfAccountRepository } from "../chart-of-accounts/chart-of-account.repository.js";
+import { ICreateEntryService } from "./create-entry.service.js";
 
 type SerializedEntry = {
   id: Uuid;
@@ -49,6 +50,8 @@ export class EntryService implements IEntryService {
     private readonly defaultEntryRepository: IDefaultEntryRepository,
     @inject(TOKENS.ChartOfAccounts.Repository)
     private readonly chartOfAccountRepository: IChartOfAccountRepository,
+    @inject(TOKENS.Entries.CreateEntryService)
+    private readonly createEntryService: ICreateEntryService,
   ) {}
 
   private serializeEntry(entry: Entry | null): SerializedEntry {
@@ -140,39 +143,10 @@ export class EntryService implements IEntryService {
   }
 
   async createEntry(entry: CreateEntryBody) {
-    const chartOfAccountCredit = await this.chartOfAccountRepository.findByUuid(
-      entry.creditAccountUuid,
-    );
-    if (!chartOfAccountCredit) {
-      throw ApiResponse.notFound("Chart of account credit não encontrado");
-    }
+    const { entry: createdEntry } =
+      await this.createEntryService.handleLedgerCreation(entry);
 
-    const chartOfAccountDebit = await this.chartOfAccountRepository.findByUuid(
-      entry.debitAccountUuid,
-    );
-    if (!chartOfAccountDebit) {
-      throw ApiResponse.notFound("Chart of account debit não encontrado");
-    }
-
-    const defaultEntry = await this.defaultEntryRepository.findByUuid(
-      entry.defaultEntryUuid,
-    );
-    if (!defaultEntry) {
-      throw ApiResponse.notFound("Default entry não encontrado");
-    }
-
-    const newEntry = await this.entryRepository.create(
-      entry.nsu,
-      chartOfAccountDebit.id,
-      chartOfAccountCredit.id,
-      BigInt(entry.amountCents),
-      BigInt(0),
-      BigInt(0),
-      entry.description || null,
-      defaultEntry.id,
-    );
-
-    return this.serializeEntry(newEntry);
+    return this.serializeEntry(createdEntry);
   }
 
   async updateEntry(entryUuid: Uuid, entry: UpdateEntryBody) {

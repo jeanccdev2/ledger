@@ -1,5 +1,6 @@
 import {
   Between,
+  EntityManager,
   FindOptionsWhere,
   LessThanOrEqual,
   Like,
@@ -23,6 +24,7 @@ export type FindAllFilters = {
 };
 
 export interface IEntryRepository {
+  setManager(manager: EntityManager): void;
   findAll(
     limit: number,
     page: number,
@@ -48,6 +50,10 @@ export class EntryRepository implements IEntryRepository {
 
   constructor() {
     this.entryRepo = dataSource.getRepository(Entry);
+  }
+
+  setManager(manager: EntityManager): void {
+    this.entryRepo = manager.getRepository(Entry);
   }
 
   async findAll(limit: number, offset: number, filters: FindAllFilters) {

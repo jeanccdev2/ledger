@@ -24,7 +24,7 @@ export const createEntryBodySchema = z.object({
   creditAccountUuid: uuidSchema,
   description: z.string().nullable().optional(),
   defaultEntryUuid: uuidSchema,
-  amountCents: amountCentsSchema,
+  amountCents: amountCentsSchema.nullable().optional(),
 });
 
 export type CreateEntryBody = z.infer<typeof createEntryBodySchema>;
